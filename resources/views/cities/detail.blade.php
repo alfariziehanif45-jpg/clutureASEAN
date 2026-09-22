@@ -10,31 +10,33 @@
     <style>
         * { box-sizing: border-box; }
         body { margin: 0; background: #071922; color: #fff; font-family: Poppins, sans-serif; }
-        .hero { min-height: 35vh; padding: 34px 8%; display: flex; align-items: end; background: linear-gradient(120deg, #072332e8, #a10f1680); position: relative; }
-        .back { position: absolute; top: 28px; color: #fff; text-decoration: none; }
+        .hero { min-height: 35vh; padding: 34px 8%; display: flex; align-items: flex-end; background: linear-gradient(120deg, #072332e8, #a10f1680); position: relative; }
+        .back { position: absolute; top: 28px; color: #fff; text-decoration: none; font-size: 0.95rem; }
+        .back:hover { text-decoration: underline; }
         .hero h1 { font: 800 clamp(36px, 6vw, 70px) 'Playfair Display', serif; margin: 0; }
         .content { max-width: 900px; margin: auto; padding: 50px 7%; display: flex; flex-direction: column; gap: 20px; }
         .card { padding: 27px; border-radius: 20px; background: #0d2937; border: 1px solid #ffffff18; }
-        .card h2 { font-family: 'Playfair Display', serif; margin-top: 0; color: #f2c14e; }
+        .card h2 { font-family: 'Playfair Display', serif; margin-top: 0; color: #f2c14e; font-size: 1.8rem; }
         .card p { color: #c2d1d7; line-height: 1.8; margin: 0; }
         
-        /* Layout Flexbox untuk Gambar di Kiri & Deskripsi di Kanan */
+        /* Item Box: Gambar Kiri, Deskripsi Kanan */
         .item-box { 
-            padding: 20px 0; 
+            padding: 24px 0; 
             border-bottom: 1px solid #ffffff18; 
             display: flex; 
-            gap: 20px; 
+            gap: 24px; 
             align-items: center; 
         }
         .item-box:last-child { border-bottom: none; }
         
         .item-image { 
-            width: 180px; 
-            height: 130px; 
+            width: 200px; 
+            height: 140px; 
             flex-shrink: 0; 
             border-radius: 12px; 
             overflow: hidden; 
             border: 1px solid #ffffff20; 
+            background: #071922;
         }
         .item-image img { 
             width: 100%; 
@@ -44,11 +46,11 @@
         }
         
         .item-info { flex: 1; }
-        .item-info h3 { margin: 0 0 8px; color: #f2c14e; font-size: 1.2rem; }
+        .item-info h3 { margin: 0 0 10px; color: #f2c14e; font-size: 1.25rem; font-family: 'Playfair Display', serif; }
 
-        /* Responsif untuk layar HP */
-        @media (max-width: 600px) {
-            .item-box { flex-direction: column; align-items: flex-start; }
+        /* Responsif Seluler */
+        @media (max-width: 640px) {
+            .item-box { flex-direction: column; align-items: flex-start; gap: 16px; }
             .item-image { width: 100%; height: 200px; }
         }
     </style>
@@ -57,7 +59,7 @@
     <header class="hero">
         <a class="back" href="javascript:history.back()">← Kembali ke {{ $city['name'] }}</a>
         <div>
-            <p>Eksplorasi {{ $type }}</p>
+            <p style="margin: 0 0 4px; color: #f2c14e; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem;">Eksplorasi {{ $type }}</p>
             <h1>{{ $city['name'] }}</h1>
         </div>
     </header>
@@ -69,11 +71,9 @@
             @if(isset($detail['items']) && count($detail['items']) > 0)
                 @foreach($detail['items'] as $item)
                     <div class="item-box">
-                        @if(isset($item['image']))
-                            <div class="item-image">
-                                <img src="{{ asset($item['image']) }}" alt="{{ $item['name'] }}">
-                            </div>
-                        @endif
+                        <div class="item-image">
+                            <img src="{{ asset($item['image'] ?? $image ?? 'images/default.jpg') }}" alt="{{ $item['name'] }}">
+                        </div>
                         <div class="item-info">
                             <h3>{{ $item['name'] }}</h3>
                             <p>{{ $item['desc'] }}</p>

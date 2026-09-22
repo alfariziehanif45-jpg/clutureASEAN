@@ -3,24 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $city['name'] }} | Indonesia Culture</title>
+    <title>{{ $city['name'] }} | Malaysia Culture</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-[#0b1723] text-white p-10">
 
-    <!-- Tombol Kembali -->
-    <a href="{{ route('countries.indonesia') }}" class="inline-block px-4 py-2 bg-white/10 rounded-full text-sm hover:bg-white/20 transition mb-4">
-        ← Kembali ke Indonesia
+    <a href="{{ route('malaysia.index') }}" class="inline-block px-4 py-2 bg-white/10 rounded-full text-sm hover:bg-white/20 transition mb-4">
+        ← Kembali ke Malaysia
     </a>
 
     <!-- Header Kota & Widget Cuaca Real-time -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center my-8 bg-[#122334] p-6 rounded-2xl border border-white/5">
         <div>
-            <span class="text-xs text-amber-400 font-semibold uppercase">PROVINSI {{ $city['province'] ?? $city['region'] ?? 'INDONESIA' }}</span>
+            <span class="text-xs text-amber-400 font-semibold uppercase">Negeri {{ $city['state'] }}</span>
             <h1 class="text-4xl font-serif font-bold mt-1">{{ $city['name'] }}</h1>
-            @if(isset($city['tagline']))
-                <p class="text-xs text-gray-400 mt-1">{{ $city['tagline'] }}</p>
-            @endif
         </div>
         
         <!-- Box Cuaca Real-time -->
@@ -36,17 +32,15 @@
         @endif
     </div>
 
-    <!-- Deskripsi & Kebudayaan / Keberagaman -->
+    <!-- Deskripsi & Kebudayaan -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-8">
         <div class="bg-[#122334] p-6 rounded-xl border border-white/5">
             <h3 class="text-xl font-bold mb-3 text-amber-400">Penjelasan Kota</h3>
-            <p class="text-gray-300 text-sm leading-relaxed">{{ $city['description'] ?? 'Informasi penjelasan kota belum tersedia.' }}</p>
+            <p class="text-gray-300 text-sm leading-relaxed">{{ $city['description'] ?? 'Penjelasan belum tersedia.' }}</p>
         </div>
         <div class="bg-[#122334] p-6 rounded-xl border border-white/5">
             <h3 class="text-xl font-bold mb-3 text-amber-400">Keberagaman & Kebudayaan</h3>
-            <p class="text-gray-300 text-sm leading-relaxed">
-                {{ $city['diversity_culture'] ?? $city['culture'] ?? $city['diversity'] ?? 'Informasi kebudayaan dan keberagaman belum tersedia.' }}
-            </p>
+            <p class="text-gray-300 text-sm leading-relaxed">{{ $city['diversity_culture'] ?? 'Informasi kebudayaan belum tersedia.' }}</p>
         </div>
     </div>
 
@@ -62,7 +56,6 @@
     @if(isset($city['leaders']))
     <div class="bg-[#122334] p-6 rounded-2xl border border-white/5 my-8">
         <h3 class="text-2xl font-serif font-bold mb-6 text-amber-400">Daftar Pemimpin Kota</h3>
-
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -84,34 +77,48 @@
     </div>
     @endif
 
-    <!-- Pakaian, Wisata, dan Kuliner Khas (Tanpa Gambar) -->
+    <!-- Pakaian, Wisata, dan Kuliner Khas (Versi Tanda/Card Tanpa Gambar) -->
     @php
         $currentSlug = $slug ?? Str::slug($city['name']);
+        
+        $firstClothing   = $city['clothing_list'][0] ?? null;
+        $firstAttraction = $city['attractions_list'][0] ?? null;
+        $firstCulinary   = $city['culinary_list'][0] ?? null;
     @endphp
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
-        <!-- Pakaian Adat -->
-        <a href="{{ route('cities.costumes', $currentSlug) }}" class="block bg-[#122334] p-6 rounded-2xl border border-white/5 hover:border-amber-400/50 transition group">
-            <h4 class="font-bold text-amber-400 text-lg mb-1">Pakaian Adat →</h4>
-            <h5 class="font-semibold text-white text-base mb-2">{{ $city['clothing']['title'] ?? 'Busana Tradisional' }}</h5>
-            <p class="text-xs text-gray-400 leading-relaxed">{{ $city['clothing']['description'] ?? 'Busana adat khas daerah dengan ornamen tradisional.' }}</p>
+        <!-- Card Pakaian Adat -->
+        <a href="{{ route('malaysia.cities.costumes', $currentSlug) }}" class="block bg-[#122334] p-6 rounded-2xl border border-white/5 hover:border-amber-400/50 hover:bg-[#162a3f] transition group">
+            <div class="flex items-center justify-between mb-2">
+                <h4 class="font-bold text-amber-400 text-lg">Pakaian Adat</h4>
+                <span class="text-amber-400 group-hover:translate-x-1 transition-transform">→</span>
+            </div>
+            <h5 class="font-semibold text-white text-base mb-2">{{ $firstClothing['title'] ?? 'Daftar Pakaian Adat' }}</h5>
+            <p class="text-sm text-gray-300 leading-relaxed line-clamp-3">{{ $firstClothing['description'] ?? 'Klik untuk melihat daftar ragam pakaian adat daerah ini.' }}</p>
         </a>
 
-        <!-- Wisata Khas -->
-        <a href="{{ route('cities.attractions', $currentSlug) }}" class="block bg-[#122334] p-6 rounded-2xl border border-white/5 hover:border-amber-400/50 transition group">
-            <h4 class="font-bold text-amber-400 text-lg mb-1">Wisata Khas →</h4>
-            <h5 class="font-semibold text-white text-base mb-2">{{ $city['attractions']['title'] ?? 'Destinasi Wisata' }}</h5>
-            <p class="text-xs text-gray-400 leading-relaxed">{{ $city['attractions']['description'] ?? 'Ikon destinasi wisata legendaris daerah.' }}</p>
+        <!-- Card Wisata Khas -->
+        <a href="{{ route('malaysia.cities.attractions', $currentSlug) }}" class="block bg-[#122334] p-6 rounded-2xl border border-white/5 hover:border-amber-400/50 hover:bg-[#162a3f] transition group">
+            <div class="flex items-center justify-between mb-2">
+                <h4 class="font-bold text-amber-400 text-lg">Wisata Khas</h4>
+                <span class="text-amber-400 group-hover:translate-x-1 transition-transform">→</span>
+            </div>
+            <h5 class="font-semibold text-white text-base mb-2">{{ $firstAttraction['title'] ?? 'Daftar Wisata Khas' }}</h5>
+            <p class="text-sm text-gray-300 leading-relaxed line-clamp-3">{{ $firstAttraction['description'] ?? 'Klik untuk melihat daftar destinasi wisata khas daerah ini.' }}</p>
         </a>
 
-        <!-- Kuliner Khas -->
-        <a href="{{ route('cities.culinary', $currentSlug) }}" class="block bg-[#122334] p-6 rounded-2xl border border-white/5 hover:border-amber-400/50 transition group">
-            <h4 class="font-bold text-amber-400 text-lg mb-1">Kuliner Khas →</h4>
-            <h5 class="font-semibold text-white text-base mb-2">{{ $city['culinary']['title'] ?? 'Kuliner Tradisional' }}</h5>
-            <p class="text-xs text-gray-400 leading-relaxed">{{ $city['culinary']['description'] ?? 'Sajian kuliner khas penuh cita rasa lokal.' }}</p>
+        <!-- Card Kuliner Khas -->
+        <a href="{{ route('malaysia.cities.culinary', $currentSlug) }}" class="block bg-[#122334] p-6 rounded-2xl border border-white/5 hover:border-amber-400/50 hover:bg-[#162a3f] transition group">
+            <div class="flex items-center justify-between mb-2">
+                <h4 class="font-bold text-amber-400 text-lg">Kuliner Khas</h4>
+                <span class="text-amber-400 group-hover:translate-x-1 transition-transform">→</span>
+            </div>
+            <h5 class="font-semibold text-white text-base mb-2">{{ $firstCulinary['title'] ?? 'Daftar Kuliner Khas' }}</h5>
+            <p class="text-sm text-gray-300 leading-relaxed line-clamp-3">{{ $firstCulinary['description'] ?? 'Klik untuk melihat daftar sajian kuliner khas daerah ini.' }}</p>
         </a>
     </div>
 
-    <!-- Script Fetch Weather Open-Meteo -->
+    <!-- Script Open-Meteo API Weather -->
     @if(isset($city['coordinates']))
     <script>
         fetch('https://api.open-meteo.com/v1/forecast?latitude={{ $city['coordinates'][0] }}&longitude={{ $city['coordinates'][1] }}&current=temperature_2m&timezone=auto')
